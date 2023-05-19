@@ -1,13 +1,9 @@
 import json
-
-from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Field, Layout
 from django import forms
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
-from django.shortcuts import render, get_object_or_404, redirect
-
+from django.shortcuts import render
 from .forms import CartForm
 from .models import Cart, CartItem, Product
 

@@ -1,6 +1,5 @@
 from django import forms
 from django.core.exceptions import ValidationError
-from django.forms import inlineformset_factory
 from cart.models import CartItem, Cart
 
 
@@ -24,8 +23,3 @@ class CartForm(forms.ModelForm):
             raise ValidationError(
                 f"I'm sorry! But we only have {product.count}KG of {product}.")
         return self.cleaned_data
-#
-#
-# CartItemFormset = inlineformset_factory(
-#     Cart, CartItem, fields=["product", "quantity"]
-# )

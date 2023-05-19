@@ -1,23 +1,23 @@
+from django.contrib.auth import get_user_model
 from django.db import models
-from .customer import Customer
 
 
 class Cart(models.Model):
 
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    customer = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     complete = models.BooleanField(default=False)
 
     def __str__(self):
-        return str(self.id)
+        return f"{self.id}"
 
     @property
-    def get_cart_total(self):
-        cartitems = self.cartitem_set.all()
-        total = sum([item.get_total for item in cartitems])
+    def get_total(self):
+        cart_items = self.items.all()
+        total = sum([item.get_total for item in cart_items])
         return total 
 
     @property
-    def get_cart_items(self):
-        cartitems = self.cartitem_set.all()
-        total = sum([item.quantity for item in cartitems])
+    def get_items(self):
+        cart_items = self.items.all()
+        total = sum([item.quantity for item in cart_items])
         return total 

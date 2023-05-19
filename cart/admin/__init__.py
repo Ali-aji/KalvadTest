@@ -1,7 +1,9 @@
 from django.contrib import admin
 from cart import models
+from .models_admin import CartAdmin, CartItemAdmin, ProductAdmin
 
-admin.site.register(models.Customer)
-admin.site.register(models.Cart)
-admin.site.register(models.CartItem)
-admin.site.register(models.Product)
+
+admin.site.register(models.Cart, CartAdmin)
+admin.site.register(models.CartItem, CartItemAdmin)
+admin.site.register(models.Product, ProductAdmin)
+

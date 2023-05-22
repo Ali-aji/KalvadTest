@@ -7,21 +7,23 @@ from django.shortcuts import render
 from .forms import CartForm
 from .models import Cart, CartItem, Product
 
+from django.views import View
+from django.contrib.auth.mixins import LoginRequiredMixin
+
 
 
 def index(request):
 	context = {}
 	return render(request, 'base.html', context)
 
-@login_required
-def cart(request, cart_id=None):
-	_cart = None
-	items = []
-	errors = []
-	formset = None
-	products = Product.objects.filter(count__gt=0)
-	customer = request.user
-	if request.method == "GET":
+class cart(LoginRequiredMixin, View):
+
+	def get(self, request, cart_id=None, *args, **kwargs):
+		
+		products = Product.objects.filter(count__gt=0)
+		formset = None
+		_cart = Cart.objects.filter(
+			customer=request.user, id=cart_id).first()
 		cart_item_formset = forms.inlineformset_factory(
 			Cart, CartItem, fields="__all__",
 			extra=len(products),
@@ -32,9 +34,21 @@ def cart(request, cart_id=None):
 				"product": product,
 				"quantity": product.default_quantity
 			}
-	if request.method == "POST":
+
+		context = {
+			'items': [],
+			'cart': _cart,
+			"products": products,
+			"formset": formset,
+		}
+		return render(request, 'cart.html', context)
+
+	def post(self, request, *args, **kwargs):
+		items = []
+		errors = []
+		formset = None
 		_cart, created = Cart.objects.get_or_create(
-			customer=customer, id=cart_id)
+			customer=request.user, complete=False)
 		formset = forms.inlineformset_factory(
 			Cart, CartItem, fields="__all__",
 			form=CartForm,
@@ -43,13 +57,13 @@ def cart(request, cart_id=None):
 			formset.save()
 			items = CartItem.objects.filter(
 				id__in=_cart.items.values_list("id"))
-			products = []
+			# products = []
 			for item in items:
 				product = item.product
 				product.count = product.count - item.quantity
 				product.save()
 				item.save()
-				products.append(product)
+				# products.append(product)
 			_cart.complete = True
 			_cart.save()
 			messages.success(
@@ -64,10 +78,13 @@ def cart(request, cart_id=None):
 					request, messages.ERROR, error,
 					fail_silently=True,
 				)
-	context = {
-		'items': items,
-		'cart': _cart,
-		"products": products,
-		"formset": formset,
-	}
-	return render(request, 'cart.html', context)
+		
+		products = Product.objects.filter(count__gt=0)
+		context = {
+			'items': items,
+			'cart': _cart,
+			"products": products,
+			"formset": formset,
+		}
+
+		return render(request, 'cart.html', context)

@@ -3,7 +3,7 @@ from cart import models
 
 
 class CartAdmin(admin.ModelAdmin):
-    list_display = ["__str__", "display_total"]
+    list_display = ["__str__", "display_total", "customer", "complete"]
 
     @admin.display(description='Total')
     def display_total(self, obj):

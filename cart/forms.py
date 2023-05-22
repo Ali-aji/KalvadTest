@@ -16,7 +16,7 @@ class CartForm(forms.ModelForm):
         cart = self.cleaned_data['cart']
         product = self.cleaned_data['product']
         quantity = self.cleaned_data['quantity']
-        if product.count == 0:
+        if product.count == 0 and quantity>0:
             raise ValidationError(
                 f"I'm sorry! But we are out of stock for {product}.")
         if product.count - quantity < 0:

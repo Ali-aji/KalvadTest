@@ -32,7 +32,8 @@
 					</div>
 					<div style="flex:1"><p>{{product.price|floatformat:2}}</p></div>
 					<div style="flex:1">
-                        <p data-line-price="{{product.default_line_price|floatformat:2}}" class="line-price">
+                        <p data-line-price="{{product.default_line_price|floatformat:2}}" class="line-price"
+						  data-product="{{product.id}}" id="{{product.id}}">
                             {{product.default_line_price|floatformat:2}}
                         </p>
                     </div>

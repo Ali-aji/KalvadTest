@@ -3,7 +3,6 @@ from django.db import models
 
 
 class Cart(models.Model):
-
     customer = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     complete = models.BooleanField(default=False)
 
@@ -14,10 +13,10 @@ class Cart(models.Model):
     def get_total(self):
         cart_items = self.items.all()
         total = sum([item.get_total for item in cart_items])
-        return total 
+        return total
 
     @property
     def get_items(self):
         cart_items = self.items.all()
         total = sum([item.quantity for item in cart_items])
-        return total 
+        return total

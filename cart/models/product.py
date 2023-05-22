@@ -1,9 +1,8 @@
-from django.db import models
 from django.core.validators import MinValueValidator
+from django.db import models
 
 
 class Product(models.Model):
-
     name = models.CharField(max_length=150, null=False, blank=False)
     price = models.FloatField(validators=[MinValueValidator(0)])
     count = models.PositiveIntegerField(default=0)
